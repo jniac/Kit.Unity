@@ -2,7 +2,7 @@
 
 namespace Kit.Unity
 {
-    public static class Misc
+    public static partial class Misc
     {
         static float previousColorAlpha;
         public static void GizmosSetColorAlpha(float a)
