@@ -4,6 +4,9 @@ namespace Kit.Unity
 {
     public static class Geom
     {
+        public static float RayDistance(Ray ray, Vector3 point)
+            => Vector3.Cross(ray.direction, point - ray.origin).magnitude;
+
         public static (Vector3[] vertices, int[] triangles) SimpleCylinder(Vector3 start, Vector3 end, float radius = .2f, int step = 8)
         {
             Vector3 v = (end - start).normalized;
