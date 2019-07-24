@@ -55,6 +55,18 @@ fixed4 mix(fixed4 a, fixed4 b, float t = .5)
 
 
 
+float easeIn2(float x) { return x * x; }
+float easeIn3(float x) { return x * x * x; }
+float easeIn4(float x) { return x * x * x * x; }
+float easeIn5(float x) { return x * x * x * x * x; }
+float easeIn(float x, float p) { return pow(x, p); }
+
+float easeOut2(float x) { return 1 - (x = 1 - x) * x; }
+float easeOut3(float x) { return 1 - (x = 1 - x) * x * x; }
+float easeOut4(float x) { return 1 - (x = 1 - x) * x * x * x; }
+float easeOut5(float x) { return 1 - (x = 1 - x) * x * x * x * x; }
+float easeOut(float x, float p) { return 1 - pow(1 - x, p); }
+
 float easeInOut(float x, float p, float i) 
 {
 	return x == i ? x : x < i 
