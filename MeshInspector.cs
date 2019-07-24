@@ -34,6 +34,7 @@ namespace Kit.Unity
 
             return $"Mesh \"{mesh.name}\"" +
                 $"\nTriangles: {mesh.triangles.Length / 3}" +
+                $"\nVertices: {mesh.vertices.Length}" +
                 $"\nsubMeshCount: {mesh.subMeshCount}";
         }
 
@@ -53,6 +54,9 @@ namespace Kit.Unity
             if (mesh == null || inspectTriangle == false)
                 return;
 
+            if (triangleIndex < 0 || triangleIndex >= mesh.triangles.Length * 3)
+                return;
+
             Gizmos.color = color;
             Gizmos.matrix = transform.localToWorldMatrix;
 
@@ -66,7 +70,7 @@ namespace Kit.Unity
 
             GizmosMeshHandler.Instance.Append(this, Gizmos.color,
                 new Vector3[] { p0, p1, p2 },
-                new int[] { 1, 2, 3 });
+                new int[] { 0, 1, 2 });
         }
 
     }
@@ -80,18 +84,25 @@ namespace Kit.Unity
         {
             base.OnInspectorGUI();
 
-            var inspector = target as MeshInspector;
+            var Target = target as MeshInspector;
 
             EditorGUILayout.LabelField("Mesh Info:");
-            EditorGUILayout.HelpBox(inspector.GetMeshInfo(), MessageType.None);
+            EditorGUILayout.HelpBox(Target.GetMeshInfo(), MessageType.None);
+
+            Mesh mesh = Target.Mesh;
 
             GUI.changed = false;
-            inspector.inspectTriangle = EditorGUILayout.Toggle("Inspect triangle", inspector.inspectTriangle);
-            inspector.triangleIndex = EditorGUILayout.IntSlider("Triangle index:", inspector.triangleIndex, 0, inspector.Mesh.triangles.Length / 3 - 1);
+            int maxTriangleIndex = mesh ? Target.Mesh.triangles.Length / 3 - 1 : 0;
+
+            GUI.enabled = mesh;
+            Target.inspectTriangle = EditorGUILayout.Toggle("Inspect triangle", Target.inspectTriangle);
+            Target.triangleIndex = EditorGUILayout.IntSlider($"Triangle index ({Target.triangleIndex}/{maxTriangleIndex}):", Target.triangleIndex, 0, maxTriangleIndex);
             if (GUILayout.Button("Next"))
-                inspector.TriangleIndexNext();
+                Target.TriangleIndexNext();
             if (GUILayout.Button("Previous"))
-                inspector.TriangleIndexPrev();
+                Target.TriangleIndexPrev();
+
+            GUI.enabled = true;
         }
     }
 #endif
