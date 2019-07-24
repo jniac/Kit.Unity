@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Kit
+namespace Kit.Unity
 {
     public static class Geom
     {
