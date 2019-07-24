@@ -40,6 +40,10 @@ namespace Kit.Unity
 
                 if (instance == null)
                 {
+                    var existing = GameObject.Find(typeof(GizmosMeshHandler).Name);
+                    if (existing)
+                        DestroyImmediate(existing);
+
                     GameObject gameObject = new GameObject(typeof(GizmosMeshHandler).Name);
                     //gameObject.hideFlags = HideFlags.DontSaveInEditor; // causes strange lags???
                     instance = gameObject.AddComponent<GizmosMeshHandler>();
