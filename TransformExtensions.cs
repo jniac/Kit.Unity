@@ -58,5 +58,15 @@ namespace Kit.Unity
 
             return transform.Collect(child => child.gameObject.name == name, list, recursiveLimit, includeSelf);
         }
+
+        public static List<T> Collect<T>(
+            this Transform transform,
+            string name,
+            List<Transform> list = null,
+            int recursiveLimit = -1,
+            bool includeSelf = false)
+            where T : Component
+            => Collect(transform, name, null, recursiveLimit, includeSelf)
+                .Select(t => t.GetComponent<T>()).Where(c => c).ToList();
     }
 }
