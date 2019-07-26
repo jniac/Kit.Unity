@@ -40,7 +40,7 @@ namespace Kit.Unity
             this.autoRemoveNullifiedKey = autoRemoveNullifiedKey && key != null;
 
             instances.Add(this);
-            dictionarySet.Add(key, this);
+            dictionarySet.Add(this.key, this);
         }
 
         public void Destroy()
