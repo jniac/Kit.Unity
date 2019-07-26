@@ -25,9 +25,9 @@ namespace Kit.Unity
 
         public Action<Anim> callback;
 
-        bool autoRemoveNullifiedKey;
+        bool autoKillNullifiedKey;
 
-        public Anim(object key, Action<Anim> callback, float duration = 1, float delay = 0, bool autoRemoveNullifiedKey = true)
+        public Anim(object key, Action<Anim> callback, float duration = 1, float delay = 0, bool autoKillNullifiedKey = true)
         {
             Ticker.Init();
 
@@ -37,7 +37,7 @@ namespace Kit.Unity
             this.duration = duration;
             time = -delay;
 
-            this.autoRemoveNullifiedKey = autoRemoveNullifiedKey && key != null;
+            this.autoKillNullifiedKey = autoKillNullifiedKey && key != null;
 
             instances.Add(this);
             dictionarySet.Add(this.key, this);
@@ -56,7 +56,7 @@ namespace Kit.Unity
             if (Destroyed)
                 return;
 
-            if (autoRemoveNullifiedKey &&
+            if (autoKillNullifiedKey &&
                 (key == null) ||
                 // because Unity can say a object is "null", but not equal to null... (nullifiedObject != null)
                 ((key is Component) && !((key as Component) ?? false)) ||

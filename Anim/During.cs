@@ -7,13 +7,13 @@ namespace Kit.Unity
             Action<Anim> callback, 
             float delay = 0,
             object key = null, 
-            bool autoRemoveSimilarKey = true, 
-            bool autoRemoveNullifiedKey = true)
+            bool autoKillSimilarKey = true, 
+            bool autoKillNullifiedKey = true)
         {
-            if (autoRemoveSimilarKey)
-            { } // TODO: remove existing anim
+            if (autoKillSimilarKey && key != null)
+                Kill(key);
 
-            return new Anim(key, callback, duration, delay, autoRemoveNullifiedKey);
+            return new Anim(key, callback, duration, delay, autoKillNullifiedKey);
         }
     }
 }
