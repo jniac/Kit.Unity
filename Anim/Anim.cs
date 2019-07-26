@@ -4,6 +4,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace Kit.Unity
 {
@@ -21,11 +23,15 @@ namespace Kit.Unity
         public float Progress { get => time < 0 ? 0 : time / duration; }
         public bool Complete { get => time == duration; }
 
+        List<Action> onComplete = new List<Action>();
+
         public bool Destroyed { get; private set; }
 
         public Action<Anim> callback;
 
         bool autoKillNullifiedKey;
+
+        public AwaitableCompletion Completion { get => new AwaitableCompletion(this); }
 
         public Anim(object key, Action<Anim> callback, float duration = 1, float delay = 0, bool autoKillNullifiedKey = true)
         {
@@ -78,7 +84,12 @@ namespace Kit.Unity
             callback(this);
 
             if (time == duration)
+            {
+                foreach (var action in onComplete)
+                    action();
+
                 Destroy();
+            }
         }
 
         static void UpdateAll(float deltaTime)
