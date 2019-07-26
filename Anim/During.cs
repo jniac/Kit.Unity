@@ -11,7 +11,7 @@ namespace Kit.Unity
             bool autoRemoveNullifiedKey = true)
         {
             if (autoRemoveSimilarKey)
-            { } // remove existing anim
+            { } // TODO: remove existing anim
 
             return new Anim(key, callback, duration, delay, autoRemoveNullifiedKey);
         }

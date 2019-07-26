@@ -10,6 +10,7 @@ namespace Kit.Unity
     public partial class Anim
     {
         static HashSet<Anim> instances = new HashSet<Anim>();
+        static DictionarySet<object, Anim> dictionarySet = new DictionarySet<object, Anim>();
 
         public const string global = "global";
 
@@ -39,6 +40,7 @@ namespace Kit.Unity
             this.autoRemoveNullifiedKey = autoRemoveNullifiedKey && key != null;
 
             instances.Add(this);
+            dictionarySet.Add(key, this);
         }
 
         public void Destroy()
@@ -46,6 +48,7 @@ namespace Kit.Unity
             Destroyed = true;
 
             instances.Remove(this);
+            dictionarySet.Remove(key, this);
         }
 
         void Update(float deltaTime)
