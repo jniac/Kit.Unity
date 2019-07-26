@@ -33,11 +33,9 @@ float map(float x, float min, float max)
 	return x <= min ? 0 : x >= max ? 1 : mapUnclamped(x, min, max);
 }
 
-
-
 float mixUnclamped(float a, float b, float t = .5) 
 {
-	return a * (1 - t) + b * t;
+	return a + (b - a) * t;
 }
 float mix(float a, float b, float t = .5) 
 {
@@ -46,7 +44,7 @@ float mix(float a, float b, float t = .5)
 
 fixed4 mixUnclamped(fixed4 a, fixed4 b, float t = .5) 
 {
-	return a * (1 - t) + b * t;
+	return a + (b - a) * t;
 }
 fixed4 mix(fixed4 a, fixed4 b, float t = .5) 
 {
