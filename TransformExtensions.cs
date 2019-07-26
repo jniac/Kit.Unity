@@ -8,6 +8,16 @@ namespace Kit.Unity
 {
     public static class TransformExtensions
     {
+        public static (Vector3 position, Vector3 scale, Quaternion rotation) GetPSR(this Transform transform)
+            => (transform.localPosition, transform.localScale, transform.localRotation);
+
+        public static void SetPSR(this Transform transform, (Vector3 position, Vector3 scale, Quaternion rotation) psr)
+        {
+            transform.localPosition = psr.position;
+            transform.localScale = psr.scale;
+            transform.localRotation = psr.rotation;
+        }
+
         public static List<Transform> Collect(
             this Transform transform, 
             Func<Transform, bool> test, 
