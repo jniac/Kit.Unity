@@ -7,6 +7,7 @@ namespace Kit.Unity
     {
         static Ticker ticker;
 
+        [ExecuteInEditMode]
         class Ticker : MonoBehaviour
         {
             public static void Init()
