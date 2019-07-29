@@ -29,6 +29,17 @@
             public static Del InOut3 = x => x < .5f ? (x = x * 2f) * x * x / 2f : 1f - (x = 2f * (1f - x)) * x * x / 2f;
             public static Del InOut4 = x => x < .5f ? (x = x * 2f) * x * x * x / 2f : 1f - (x = 2f * (1f - x)) * x * x * x / 2f;
             public static Del InOut5 = x => x < .5f ? (x = x * 2f) * x * x * x * x / 2f : 1f - (x = 2f * (1f - x)) * x * x * x * x / 2f;
+
+            // https://www.desmos.com/calculator/o0ffhpeqos
+            /*
+            {
+                float ratio = 1f - Pow(1f - x, 2f * freq);
+                amp = 1f + (amp - 1f) * ratio;
+                return 1f + amp * Cos(PI * (1f + x * freq)) * Pow(1f - x, power);
+            };
+             */
+            public static Del Elastic(float freq = 7, float amp = .33f, float power = 2.66f) => x =>
+                1f + (1f + (amp - 1f) * (1f - Pow(1f - x, 2f * freq))) * Cos(PI * (1f + x * freq)) * Pow(1f - x, power);
         }
     }
 }
