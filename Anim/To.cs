@@ -47,7 +47,7 @@ namespace Kit.Unity
 
             List<Action<float>> actions = new List<Action<float>>();
 
-            Ease.Del ease = Ease.Linear;
+            Ease.Del ease = Ease.Out3;
             float delay = 0;
 
             // speed
