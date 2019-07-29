@@ -47,7 +47,7 @@ namespace Kit.Unity
 
             List<Action<float>> actions = new List<Action<float>>();
 
-            Ease.Del ease = Ease.Out3;
+            var ease = Ease.Out3;
             float delay = 0;
 
             // speed
@@ -66,7 +66,7 @@ namespace Kit.Unity
 
                 if (name == "ease")
                 {
-                    ease = property.GetValue(props) as Ease.Del;
+                    ease = property.GetValue(props) as Func<float, float>;
                     continue;
                 }
 

@@ -1,13 +1,12 @@
 ﻿namespace Kit.Unity
 {
     using static UnityEngine.Mathf;
+    using Del = System.Func<float, float>;
 
     public partial class Anim
     {
         public static class Ease
         {
-            public delegate float Del(float x);
-
             public static Del Linear = x => x;
 
             public static Del In(float power) => x => Pow(x, power);
@@ -47,6 +46,9 @@
 
                 return x => OvershootBase(x * x1, a) / y1;
             }
+
+            public static Del CubicBezier(float mX1, float mY1, float mX2, float mY2, bool clamp = true)
+                => CubicBezierEase.Get(mX1, mY1, mX2, mY2, clamp);
         }
     }
 }
