@@ -20,7 +20,8 @@ namespace Kit.Unity
 
         public float time, duration, delay, timeScale = 1;
 
-        public float Progress { get => time < 0 ? 0 : time / duration; }
+        public bool Instantaneous { get => duration == 0; }
+        public float Progress { get => Instantaneous ? 1 : time < 0 ? 0 : time / duration; }
         public bool Complete { get => time == duration; }
 
         List<Action> onComplete = new List<Action>();
