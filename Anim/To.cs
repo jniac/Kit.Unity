@@ -58,6 +58,12 @@ namespace Kit.Unity
                 var type = property.PropertyType;
                 var name = property.Name;
 
+                if (name == "duration")
+                {
+                    duration = (float)property.GetValue(props);
+                    continue;
+                }
+
                 if (name == "ease")
                 {
                     ease = property.GetValue(props) as Ease.Del;
@@ -70,36 +76,48 @@ namespace Kit.Unity
                     continue;
                 }
 
-                var propertyFrom = targetType.GetProperty(name);
+                var propertyTarget = targetType.GetProperty(name);
 
-                bool propertyTypesMatch = propertyFrom.PropertyType == type;
+                if (propertyTarget == null)
+                    throw new Exception($"the property \"{name}\" does not exist on target ({target})!");
+
+                bool propertyTypesMatch = propertyTarget.PropertyType == type;
 
                 if (!propertyTypesMatch)
-                    throw new Exception($"properties do not match: {name} {type} {propertyFrom.PropertyType}");
+                    throw new Exception($"properties \"{name}\" do not match: " +
+                    	$"\nfrom: {type}, to: {propertyTarget.PropertyType}");
 
-                var methods = property.PropertyType.GetMethods();
-
-                var add = Matching(methods, "op_Addition", type, type);
-                var sub = Matching(methods, "op_Subtraction", type, type);
-                var mul = Matching(methods, "op_Multiply", type, typeof(float));
-
-                //// NOTE: May check for add, sub & mul existence
-
-                object from = propertyFrom.GetValue(target);
+                object from = propertyTarget.GetValue(target);
                 object to = property.GetValue(props);
-                object delta = sub.Invoke(null, new object[] { to, from });
 
-                if (EvaluateDistance(delta, out float distanceEvaluation))
-                    distance = distanceEvaluation;
+                Action<float> action;
 
-                Action<float> action = t => propertyFrom.SetValue(target,
-                    add.Invoke(null, new object[] { from, mul.Invoke(null, new object[] { delta, t }) }));
+                if (from is Quaternion fromQ && to is Quaternion toQ)
+                {
+                    action = t => propertyTarget.SetValue(target, 
+                        Quaternion.SlerpUnclamped(fromQ, toQ, t));
+                }
+                else
+                {
+                    var methods = property.PropertyType.GetMethods();
+                    var add = Matching(methods, "op_Addition", type, type);
+                    var sub = Matching(methods, "op_Subtraction", type, type);
+                    var mul = Matching(methods, "op_Multiply", type, typeof(float));
+
+                    object delta = sub.Invoke(null, new object[] { to, from });
+
+                    if (EvaluateDistance(delta, out float distanceEvaluation))
+                        distance = distanceEvaluation;
+
+                    action = t => propertyTarget.SetValue(target,
+                        add.Invoke(null, new object[] { from, mul.Invoke(null, new object[] { delta, t }) }));
+                }
 
                 actions.Add(action);
             }
 
             if (!float.IsNaN(speed) && !float.IsNaN(distance))
-                duration = speed * distance;
+                duration = distance / speed;
 
             if (autoKillSimilarTarget)
                 Kill(target);
