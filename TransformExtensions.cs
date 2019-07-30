@@ -8,6 +8,22 @@ namespace Kit.Unity
 {
     public static class TransformExtensions
     {
+        public static bool IsParentOf(this Transform parent, Transform child)
+            => child.IsChildOf(parent);
+
+        public static bool IsAncestorOf(this Transform parent, Transform child)
+        {
+            while (child)
+            {
+                if (child.parent == parent)
+                    return true;
+
+                child = child.parent;
+            }
+
+            return false;
+        }
+
         public static (Vector3 position, Vector3 scale, Quaternion rotation) GetPSR(this Transform transform)
             => (transform.localPosition, transform.localScale, transform.localRotation);
 
@@ -17,6 +33,13 @@ namespace Kit.Unity
             transform.localScale = psr.scale;
             transform.localRotation = psr.rotation;
         }
+
+
+
+
+
+
+
 
         public static List<Transform> Collect(
             this Transform transform, 
