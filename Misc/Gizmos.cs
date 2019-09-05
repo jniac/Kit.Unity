@@ -47,7 +47,7 @@ namespace Kit.Unity
 
         public static void GizmosDrawCylinder(Vector3 start, Vector3 end, float radius = .2f, int step = 8)
         {
-            var (vertices, triangles) = Geom.SimpleCylinder(start, end, radius, step);
+            var (vertices, uv, triangles) = Geom.SimpleCylinder(start, end, radius, step);
 
             Mesh mesh = GetGizmosDrawMesh();
 

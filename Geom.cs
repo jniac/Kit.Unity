@@ -7,33 +7,39 @@ namespace Kit.Unity
         public static float RayDistance(Ray ray, Vector3 point)
             => Vector3.Cross(ray.direction, point - ray.origin).magnitude;
 
-        public static (Vector3[] vertices, int[] triangles) SimpleCylinder(Vector3 start, Vector3 end, float radius = .2f, int step = 8)
+        public static (Vector3[] vertices, Vector2[] uv, int[] triangles) SimpleCylinder(Vector3 start, Vector3 end, float radius = .2f, int step = 8)
         {
             Vector3 v = (end - start).normalized;
             Vector3 u = Vector3.Cross(v, Mathf.Abs(Vector3.Dot(v, Vector3.up)) < .9f ? Vector3.up : Vector3.right).normalized;
             Vector3 w = Vector3.Cross(v, u);
 
-            var vertices = new Vector3[step * 2];
-            var uv = new Vector2[step * 2];
+            var vertices = new Vector3[(step + 1) * 2];
+            var uv = new Vector2[(step + 1) * 2];
             var triangles = new int[step * 3 * 2];
 
-            for (int i = 0; i < step; i++)
+            for (int i = 0; i <= step; i++)
             {
                 float a = Mathf.PI * 2 * i / step;
                 Vector3 r = (u * Mathf.Cos(a) + w * Mathf.Sin(a)) * radius;
                 vertices[i] = start + r;
-                vertices[step + i] = end + r;
+                vertices[step + 1 + i] = end + r;
 
-                triangles[i * 3 * 2 + 0] = i;
-                triangles[i * 3 * 2 + 1] = (i + 1) % step;
-                triangles[i * 3 * 2 + 2] = i + step;
+                uv[i] = new Vector2(0, (float)i / step);
+                uv[step + 1 + i] = new Vector2(1, (float)i / step);
 
-                triangles[i * 3 * 2 + 3] = (i + 1) % step;
-                triangles[i * 3 * 2 + 4] = (i + 1) % step + step;
-                triangles[i * 3 * 2 + 5] = i + step;
+                if (i < step)
+                {
+                    triangles[i * 3 * 2 + 0] = i;
+                    triangles[i * 3 * 2 + 1] = (i + 1) % (step + 1);
+                    triangles[i * 3 * 2 + 2] = i + step + 1;
+
+                    triangles[i * 3 * 2 + 3] = (i + 1) % (step + 1);
+                    triangles[i * 3 * 2 + 4] = (i + 1) % (step + 1) + step + 1;
+                    triangles[i * 3 * 2 + 5] = i + step + 1;
+                }
             }
 
-            return (vertices, triangles);
+            return (vertices, uv, triangles);
         }
 
         public static float TriangleArea(Vector3 p1, Vector3 p2, Vector3 p3)
