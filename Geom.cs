@@ -36,6 +36,13 @@ namespace Kit.Unity
             return (vertices, triangles);
         }
 
+        public static float TriangleArea(Vector3 p1, Vector3 p2, Vector3 p3)
+        {
+            var u = p2 - p1;
+            var v = p3 - p1;
+            return Vector3.Cross(u, v).magnitude / 2;
+        }
+
         // https://answers.unity.com/questions/861719/a-fast-triangle-triangle-intersection-algorithm-fo.html
         public static bool Intersect(Vector3 p1, Vector3 p2, Vector3 p3, Ray ray)
         {
