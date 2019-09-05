@@ -38,14 +38,19 @@ namespace Kit.Unity
                 $"\nsubMeshCount: {mesh.subMeshCount}";
         }
 
-        public (Vector3, Vector3, Vector3) GetTriangle(Mesh mesh, int index)
+        public (Vector3, Vector3, Vector3) GetTriangle(int index)
         {
+            Mesh mesh = Mesh;
+
             return (
                 mesh.vertices[mesh.triangles[index * 3]],
                 mesh.vertices[mesh.triangles[index * 3 + 1]],
                 mesh.vertices[mesh.triangles[index * 3 + 2]]
             );
         }
+
+        public bool TriangleIndexIsValid() =>
+            Mesh ?? triangleIndex >= 0 && triangleIndex < Mesh.triangles.Length * 3;
 
         private void OnDrawGizmos()
         {
@@ -54,13 +59,13 @@ namespace Kit.Unity
             if (mesh == null || inspectTriangle == false)
                 return;
 
-            if (triangleIndex < 0 || triangleIndex >= mesh.triangles.Length * 3)
+            if (!TriangleIndexIsValid())
                 return;
 
             Gizmos.color = color;
             Gizmos.matrix = transform.localToWorldMatrix;
 
-            var (p0, p1, p2) = GetTriangle(mesh, triangleIndex);
+            var (p0, p1, p2) = GetTriangle(triangleIndex);
             var C = (p0 + p1 + p2) / 3;
             var N = Vector3.Cross(p1 - p0, p2 - p0);
             Gizmos.DrawLine(p0, p1);
@@ -69,7 +74,7 @@ namespace Kit.Unity
             Gizmos.DrawRay(C, N);
 
             GizmosMeshHandler.Instance.Append(this, Gizmos.color,
-                new Vector3[] { p0, p1, p2 },
+                new Vector3[] { transform.TransformPoint(p0), transform.TransformPoint(p1), transform.TransformPoint(p2) },
                 new int[] { 0, 1, 2 });
         }
 
@@ -101,6 +106,20 @@ namespace Kit.Unity
                 Target.TriangleIndexNext();
             if (GUILayout.Button("Previous"))
                 Target.TriangleIndexPrev();
+
+            string triangleInfo;
+            if (Target.inspectTriangle && Target.TriangleIndexIsValid())
+            {
+                var (p0, p1, p2) = Target.GetTriangle(Target.triangleIndex);
+                triangleInfo = $"0: {p0}\n1: {p1}\n2: {p2}\nArea: {Geom.TriangleArea(p0, p1, p2)}";
+            }
+            else
+            {
+                triangleInfo = "0 ...\n1 ...\n2 ...\nArea: ...";
+            }
+            EditorGUILayout.LabelField("Triangle Info:");
+            EditorGUILayout.HelpBox(triangleInfo, MessageType.None);
+
 
             GUI.enabled = true;
         }
