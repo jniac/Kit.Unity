@@ -44,5 +44,8 @@ namespace Kit.Unity
 
             return new Color(r, g, b, a);
         }
+
+        public static Color WithAlpha(Color color, float alpha) =>
+            new Color(color.r, color.g, color.b, alpha);
     }
 }
