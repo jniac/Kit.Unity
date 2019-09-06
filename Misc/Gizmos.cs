@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Kit.Unity
 {
@@ -19,6 +20,18 @@ namespace Kit.Unity
             color.a = 1;
             Gizmos.color = color;
         }
+
+        public static void GizmosWithColor(Color color, Action callback)
+        {
+            Color before = Gizmos.color;
+            Gizmos.color = color;
+            callback();
+            Gizmos.color = before;
+        }
+
+
+
+
 
         private static Mesh gizmosDrawMesh;
         private static Mesh GetGizmosDrawMesh() => gizmosDrawMesh ?? (gizmosDrawMesh = new Mesh());
