@@ -17,7 +17,9 @@ namespace Kit.Unity
             var str = t.ToString();
 
             if (pattern != null)
-                str = pattern.Replace("$", str);
+                str = pattern.Contains("$")
+                    ? pattern.Replace("$", str)
+                    : $"{pattern} {str}";
 
             if (type)
                 str = $"({t.GetType().Name}) {str}";
