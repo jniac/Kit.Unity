@@ -21,11 +21,16 @@ namespace Kit.Unity
                         GameObject gameObject = GameObject.Find("Main") 
                             ?? new GameObject($"{typeof(Anim).Name}-{typeof(Ticker).Name}");
 
-                        gameObject.hideFlags = HideFlags.DontSave;
+                        gameObject.hideFlags = HideFlags.HideAndDontSave;
 
                         ticker = gameObject.AddComponent<Ticker>();
                     }
                 }
+            }
+
+            private void OnEnable()
+            {
+                print(this);
             }
 
             private void Update()
