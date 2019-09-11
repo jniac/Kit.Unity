@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using Kit.Utils;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,18 +14,20 @@ namespace Kit.Unity
     {
         const string NAME = "RayCast Inspector";
 
-        [MenuItem("Tools/Kit/" + NAME)]
+#if UNITY_EDITOR
+        [MenuItem("GameObject/Kit/" + NAME)]
         static void CreateInstance()
         {
             var go = new GameObject(NAME);
             go.AddComponent<RaycastInspector>();
         }
+#endif
 
         public enum Mode { FORWARD, BACKWARD, BOTH }
 
         public Mode mode = Mode.FORWARD;
-        public Vector3 p0;
-        public Vector3 p1;
+        public Vector3 p0 = Vector3.zero;
+        public Vector3 p1 = Vector3.right * 4;
 
         public int maxPrintCount = 10;
 
@@ -78,13 +81,20 @@ namespace Kit.Unity
 
             Gizmos.DrawLine(p0, p1);
 
+            if (!selected)
+            {
+                Gizmos.DrawSphere(p0, .05f);
+                Gizmos.DrawSphere(p1, .05f);
+            }
+
             foreach (var hit in hits)
                 Gizmos.DrawSphere(hit.point, selected ? .1f : .075f);
 
             GUIStyle style = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter };
             style.normal.textColor = Gizmos.color;
-            Handles.Label(p0 + Vector3.up * .15f, "P0", style);
-            Handles.Label(p1 + Vector3.up * .15f, "P1", style);
+            style.fixedWidth = 300;
+            Handles.Label(p0 + Vector3.up * .25f, selected ? $"P0{p0.ToString("0.0")}" : "P0", style);
+            Handles.Label(p1 + Vector3.up * .25f, selected ? $"P1{p1.ToString("0.0")}" : "P1", style);
         }
 #endif
     }
