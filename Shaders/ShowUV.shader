@@ -7,7 +7,7 @@
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Opaque" "PreviewType"="Plane" }
         LOD 100
 
         Pass
@@ -34,8 +34,6 @@
                 float4 vertex : SV_POSITION;
             };
 
-            float SPACING, DOT_SIZE;
-
             v2f vert (appdata v)
             {
                 v2f o;
@@ -45,22 +43,29 @@
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
-            {
-                // sample the texture
-                fixed4 col = float4(i.uv, 1, 1);
+            float SPACING = 8, DOT_SIZE = .1;
 
-                float2 p = (i.uv * SPACING) % 1;
+            bool circle(float2 p) 
+            {
+                p *= SPACING;
+
+                p %= 1;
 
                 if (p.x > .5)
                     p.x += -1;
                 if (p.y > .5)
                     p.y += -1;
 
-                if (sqLength(p) < DOT_SIZE * DOT_SIZE)
-                    // col = float4(1 - i.uv, 1, 1);
-                    // col = float4(0, 1, 0, 1);
-                    col = 1;
+                return sqLength(p) < DOT_SIZE * DOT_SIZE;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                // sample the texture
+                fixed4 col = float4(i.uv, 1, 1);
+
+                if (circle(i.uv))
+                    return 1;
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
