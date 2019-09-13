@@ -14,7 +14,7 @@ namespace Kit.Unity
     {
         public static T Print<T>(this T t, string pattern = null, bool type = false)
         {
-            var str = t.ToString();
+            var str = t?.ToString() ?? "null";
 
             if (pattern != null)
                 str = pattern.Contains("$")
