@@ -20,7 +20,7 @@ namespace Kit.Unity
 
         // utility method
         static GUIStyle horizontalLine;
-        public static void HorizontalLine(Color color)
+        public static void HorizontalLine(Color color, float margin = 2)
         {
             if (horizontalLine == null)
             {
@@ -32,9 +32,13 @@ namespace Kit.Unity
 
             var c = GUI.color;
             GUI.color = color;
+            GUILayout.Space(margin);
             GUILayout.Box(GUIContent.none, horizontalLine);
+            GUILayout.Space(margin);
             GUI.color = c;
         }
+        public static void HorizontalLine(float margin = 2) =>
+            HorizontalLine(new Color(0, 0, 0, .15f), margin);
 #endif
     }
 }
