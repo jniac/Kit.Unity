@@ -50,8 +50,8 @@ namespace Kit.Unity
                 {
                     Instance = this;
 
-                    if (!Application.isPlaying)
-                        print($"well we are in the editor, Anim will not work very well {GetInstanceID()}");
+                    //if (!Application.isPlaying)
+                        //print($"well we are in the editor, Anim will not work very well {GetInstanceID()}");
                 }
             }
 
