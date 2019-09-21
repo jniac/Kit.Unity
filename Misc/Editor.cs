@@ -12,7 +12,7 @@ namespace Kit.Unity
     {
 #if UNITY_EDITOR
         public static void HelpBox(MessageType type, params object[] args) =>
-            EditorGUILayout.HelpBox(args.StringJoin("\n"), type);
+            EditorGUILayout.HelpBox(args.StringJoin("\n").Trim(), type);
 
         public static void HelpBox(params object[] args) =>
             HelpBox(MessageType.None, args);
