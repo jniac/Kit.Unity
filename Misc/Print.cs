@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Linq;
+using UnityEngine;
 
 namespace Kit.Unity
 {
@@ -25,6 +27,25 @@ namespace Kit.Unity
                 str = $"({t.GetType().Name}) {str}";
 
             Debug.Log(str);
+
+            return t;
+        }
+
+        public static T PrintList<T>(this T t, string pattern = null, int max = 10)
+            where T : IEnumerable
+        {
+            var list = (t as IEnumerable).Cast<object>();
+
+            string str = $"({t.GetType().Name}, {list.Count()})";
+
+            if (pattern != null)
+                str = pattern.Contains("$")
+                    ? pattern.Replace("$", str)
+                    : $"{pattern} {str}";
+
+            var preview = string.Join(", ", list.Take(max));
+
+            Debug.Log($"{str} {preview}");
 
             return t;
         }
