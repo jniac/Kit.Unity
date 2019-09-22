@@ -154,7 +154,7 @@ namespace Kit.Unity
                     .Concat(tooLong ? new string[] { $"(+{Target.hits.Length - max})" } : new string[0])
                     .StringJoin("\n");
 
-                string message = $"hits: {Target.hits.Length}\n{colliderMessage}";
+                string message = $"hits: {Target.hits.Length} (mask: {(int)Target.layerMask})\n{colliderMessage}";
                 EditorGUILayout.HelpBox(message, MessageType.None);
             }
         }
