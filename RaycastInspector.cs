@@ -25,16 +25,17 @@ namespace Kit.Unity
 
         public enum Mode { FORWARD, BACKWARD, BOTH }
 
-        public Mode mode = Mode.FORWARD;
+        public LayerMask layerMask = ~0;
+
+        public Mode mode = Mode.BOTH;
         public Vector3 p0 = Vector3.zero;
         public Vector3 p1 = Vector3.right * 4;
 
         public int maxPrintCount = 10;
 
-        [HideInInspector, NonSerialized]
-        public bool selected;
+        bool selected;
 
-        public RaycastHit[] hits = new RaycastHit[0];
+        RaycastHit[] hits = new RaycastHit[0];
 
         private void OnEnable()
         {
@@ -51,16 +52,16 @@ namespace Kit.Unity
             {
                 default:
                 case Mode.FORWARD:
-                    hits = Physics.RaycastAll(ray, maxDistance);
+                    hits = Physics.RaycastAll(ray, maxDistance, layerMask);
                     break;
 
                 case Mode.BACKWARD:
-                    hits = Physics.RaycastAll(backRay, maxDistance);
+                    hits = Physics.RaycastAll(backRay, maxDistance, layerMask);
                     break;
 
                 case Mode.BOTH:
-                    hits = Physics.RaycastAll(ray, maxDistance)
-                        .Concat(Physics.RaycastAll(backRay, maxDistance))
+                    hits = Physics.RaycastAll(ray, maxDistance, layerMask)
+                        .Concat(Physics.RaycastAll(backRay, maxDistance, layerMask))
                         .OrderBy(hit => hit.distance)
                         .ToArray();
                     break;
@@ -96,59 +97,67 @@ namespace Kit.Unity
             Handles.Label(p0 + Vector3.up * .25f, selected ? $"P0{p0.ToString("0.0")}" : "P0", style);
             Handles.Label(p1 + Vector3.up * .25f, selected ? $"P1{p1.ToString("0.0")}" : "P1", style);
         }
+
+
+        [CustomEditor(typeof(RaycastInspector))]
+        public class MyEditor : Editor
+        {
+            RaycastInspector Target { get => target as RaycastInspector; }
+
+            private void OnEnable()
+            {
+                Tools.hidden = true;
+            }
+
+            private void OnDisable()
+            {
+                Tools.hidden = false;
+            }
+
+            private void OnSceneGUI()
+            {
+                Handles.color = Target.selected ? Color.yellow : Color.white;
+                Handles.DrawLine(Target.p0, Target.p1);
+
+                EditorGUI.BeginChangeCheck();
+                var p0 = Handles.DoPositionHandle(Target.p0, Quaternion.identity);
+                if (EditorGUI.EndChangeCheck())
+                    Target.p0 = p0;
+
+                EditorGUI.BeginChangeCheck();
+                var p1 = Handles.DoPositionHandle(Target.p1, Quaternion.identity);
+                if (EditorGUI.EndChangeCheck())
+                    Target.p1 = p1;
+
+                if (GUI.changed)
+                    Target.Compute();
+            }
+
+            string ColliderInfo(Collider collider)
+            {
+                if (collider == null)
+                    return null;
+
+                return collider.ToString() + 
+                    " layer: " + LayerMask.LayerToName(collider.gameObject.layer);
+            }
+
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+
+                int max = Target.maxPrintCount;
+                bool tooLong = Target.hits.Length > max;
+                string colliderMessage =
+                    (tooLong ? Target.hits.Take(max) : Target.hits)
+                    .Select(h => ColliderInfo(h.collider) ?? "Collider has been destroyed")
+                    .Concat(tooLong ? new string[] { $"(+{Target.hits.Length - max})" } : new string[0])
+                    .StringJoin("\n");
+
+                string message = $"hits: {Target.hits.Length}\n{colliderMessage}";
+                EditorGUILayout.HelpBox(message, MessageType.None);
+            }
+        }
 #endif
     }
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(RaycastInspector))]
-    public class RaycastInspectorEditor : Editor
-    {
-        RaycastInspector Target { get => target as RaycastInspector; }
-
-        private void OnEnable()
-        {
-            Tools.hidden = true;
-        }
-
-        private void OnDisable()
-        {
-            Tools.hidden = false;
-        }
-
-        private void OnSceneGUI()
-        {
-            Handles.color = Target.selected ? Color.yellow : Color.white;
-            Handles.DrawLine(Target.p0, Target.p1);
-
-            EditorGUI.BeginChangeCheck();
-            var p0 = Handles.DoPositionHandle(Target.p0, Quaternion.identity);
-            if (EditorGUI.EndChangeCheck())
-                Target.p0 = p0;
-
-            EditorGUI.BeginChangeCheck();
-            var p1 = Handles.DoPositionHandle(Target.p1, Quaternion.identity);
-            if (EditorGUI.EndChangeCheck())
-                Target.p1 = p1;
-
-            if (GUI.changed)
-                Target.Compute();
-        }
-
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-
-            int max = Target.maxPrintCount;
-            bool tooLong = Target.hits.Length > max;
-            string colliderMessage =
-                (tooLong ? Target.hits.Take(max) : Target.hits)
-                .Select(h => h.collider?.ToString() ?? "Collider has been destroyed")
-                .Concat(tooLong ? new string[] { $"(+{Target.hits.Length - max})" } : new string[0])
-                .StringJoin("\n");
-
-            string message = $"hits: {Target.hits.Length}\n{colliderMessage}";
-            EditorGUILayout.HelpBox(message, MessageType.None);
-        }
-    }
-#endif
 }
