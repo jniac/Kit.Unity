@@ -51,6 +51,16 @@ namespace Kit.Unity
 
             EditorGUILayout.EndVertical();
         }
+
+        public static void IfEditorChanged(Action action, Action then)
+        {
+            EditorGUI.BeginChangeCheck();
+
+            action();
+
+            if (EditorGUI.EndChangeCheck())
+                then();
+        }
 #endif
     }
 }
