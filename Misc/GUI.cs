@@ -5,7 +5,7 @@ namespace Kit.Unity
 {
     public static partial class Misc
     {
-        public static void WithGui(bool enabled, Action action)
+        public static void WithGuiEnabled(bool enabled, Action action)
         {
             bool before = GUI.enabled;
             GUI.enabled = enabled;
