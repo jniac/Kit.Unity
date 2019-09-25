@@ -19,11 +19,16 @@ namespace Kit.Unity
         public readonly object key;
 
         public float time, duration, delay, timeScale = 1;
+        public int frame;
+    
+        // pre-run is the concept of running once the anim, even if delayed, to allow initialization.
+        bool preRun;
 
         public bool Instantaneous => duration == 0;
         public float Progress => Instantaneous ? 1 : time < 0 ? 0 : time / duration;
         public bool Complete => time == duration;
-        public bool FirstFrame => frame == 0;
+        public bool FirstFrame => !preRun && frame == 0;
+        public bool PreRun => preRun;
 
         List<Action> onComplete = new List<Action>();
 
@@ -35,7 +40,10 @@ namespace Kit.Unity
 
         public AwaitableCompletion Completion { get => new AwaitableCompletion(this); }
 
-        public Anim(object key, Action<Anim> callback, float duration = 1, float delay = 0, bool autoKillNullifiedKey = true)
+        public Anim(object key, Action<Anim> callback, 
+            float duration = 1, float delay = 0, 
+            bool autoKillNullifiedKey = true,
+            bool preRunDelayedAnim = true)
         {
             Ticker.Init();
 
@@ -46,6 +54,8 @@ namespace Kit.Unity
             time = -delay;
 
             this.autoKillNullifiedKey = autoKillNullifiedKey && key != null;
+
+            preRun = preRunDelayedAnim && delay > 0;
 
             instances.Add(this);
             dictionarySet.Add(this.key, this);
@@ -78,7 +88,15 @@ namespace Kit.Unity
 
             // delayed
             if (time < 0)
+            {
+                if (preRun)
+                {
+                    callback(this);
+                    preRun = false;
+                }
+
                 return;
+            }
 
             if (time > duration)
                 time = duration;
@@ -92,6 +110,8 @@ namespace Kit.Unity
 
                 Destroy();
             }
+
+            frame++;
         }
 
         static void UpdateAll(float deltaTime)
