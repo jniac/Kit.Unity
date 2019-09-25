@@ -39,6 +39,18 @@ namespace Kit.Unity
         }
         public static void HorizontalLine(float margin = 2) =>
             HorizontalLine(new Color(0, 0, 0, .15f), margin);
+
+
+        public static void WithinVertical(Action action)
+        {
+            GUIStyle style = new GUIStyle(EditorStyles.helpBox);
+            style.padding = new RectOffset(10, 10, 10, 10);
+            EditorGUILayout.BeginVertical(style);
+
+            action();
+
+            EditorGUILayout.EndVertical();
+        }
 #endif
     }
 }
