@@ -117,5 +117,22 @@ namespace Kit.Unity
             where T : Component
             => Collect(transform, "*", null, recursiveLimit, includeSelf)
                 .Select(t => t.GetComponent<T>()).Where(c => c).ToList();
+
+
+
+        public static void DestroyAllChildren(this Transform transform)
+        {
+            foreach(var t in transform.Cast<Transform>().ToArray())
+            {
+                if (Application.isPlaying)
+                {
+                    UnityEngine.Object.Destroy(t.gameObject);
+                }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(t.gameObject);
+                }
+            }
+        }
     }
 }
