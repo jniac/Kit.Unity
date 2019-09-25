@@ -79,7 +79,8 @@ float easeInOut(float x, float p, float i)
 
 
 
-
+const static float3 red = float3(1, 0, 0);
+const static float3 blue = float3(0, 0, 1);
 
 
 // SHAPES
@@ -93,4 +94,31 @@ float circle(in float2 p, float radius)
 }
 
 
+
+// SDF 2D
+// https://www.iquilezles.org/www/articles/distfunctions2d/distfunctions2d.htm
+
+float sdCircle(in float2 p, in float r)
+{
+	return length(p) - r;
+}
+
+float sdBox(in float2 p, in float2 b)
+{
+    float2 d = abs(p)-b;
+    return length(max(d, float2(0, 0))) + min(max(d.x,d.y), 0.0);
+}
+
+float sdPie(in float2 p, in float2 c, in float r)
+{
+    p.x = abs(p.x);
+    float l = length(p) - r;
+    float m = length(p-c*clamp(dot(p,c),0.0,r)); // c = sin/cos of the aperture
+    return max(l,m*sign(c.y*p.x-c.x*p.y));
+}
+
+float sdAnnularShape(in float sd, in float r)
+{
+	return abs(sd) - r;
+}
 
