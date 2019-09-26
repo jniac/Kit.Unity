@@ -20,6 +20,8 @@ namespace Kit.Unity
 
         public float time, duration, delay, timeScale = 1;
         public int frame;
+
+        float timeOld;
     
         // pre-run is the concept of running once the anim, even if delayed, to allow initialization.
         bool preRun;
@@ -29,6 +31,12 @@ namespace Kit.Unity
         public bool Complete => time == duration;
         public bool FirstFrame => !preRun && frame == 0;
         public bool PreRun => preRun;
+
+        public bool TimeUpTrough(float threshold) =>
+            time >= threshold && timeOld < threshold;
+
+        public bool ProgressUpThrough(float threshold) =>
+            TimeUpTrough(threshold * duration);
 
         List<Action> onComplete = new List<Action>();
 
@@ -84,6 +92,7 @@ namespace Kit.Unity
                 return;
             }
 
+            timeOld = time;
             time += deltaTime * timeScale;
 
             // delayed
