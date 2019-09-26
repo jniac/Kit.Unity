@@ -51,7 +51,7 @@ namespace Kit.Unity
         }
 
         public static Anim To(object target, float duration, object props, 
-            bool autoKillSimilarTarget = true, bool autoKillNullifiedTarget = true)
+            bool autoKillSimilarTarget = true, bool autoKillNullifiedTarget = true, bool preRun = true)
         {
             Type targetType = target.GetType();
 
@@ -154,12 +154,12 @@ namespace Kit.Unity
                 foreach (var action in actions)
                     action(t);
 
-            }, duration, delay, autoKillNullifiedTarget);
+            }, duration, delay, autoKillNullifiedTarget, preRun);
         }
 
         public static Anim To(object target, object props,
-            bool autoKillSimilarTarget = true, bool autoKillNullifiedTarget = true) =>
-            To(target, 1, props, autoKillSimilarTarget, autoKillNullifiedTarget);
+            bool autoKillSimilarTarget = true, bool autoKillNullifiedTarget = true, bool preRun = true) =>
+            To(target, 1, props, autoKillSimilarTarget, autoKillNullifiedTarget, preRun);
 
     }
 }

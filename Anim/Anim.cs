@@ -51,7 +51,7 @@ namespace Kit.Unity
         public Anim(object key, Action<Anim> callback, 
             float duration = 1, float delay = 0, 
             bool autoKillNullifiedKey = true,
-            bool preRunDelayedAnim = true)
+            bool preRun = true)
         {
             Ticker.Init();
 
@@ -63,7 +63,12 @@ namespace Kit.Unity
 
             this.autoKillNullifiedKey = autoKillNullifiedKey && key != null;
 
-            preRun = preRunDelayedAnim && delay > 0;
+            this.preRun = preRun;
+            if (preRun)
+            {
+                callback(this);
+                this.preRun = false;
+            }
 
             instances.Add(this);
             dictionarySet.Add(this.key, this);
@@ -97,15 +102,7 @@ namespace Kit.Unity
 
             // delayed
             if (time < 0)
-            {
-                if (preRun)
-                {
-                    callback(this);
-                    preRun = false;
-                }
-
                 return;
-            }
 
             if (time > duration)
                 time = duration;
