@@ -70,13 +70,13 @@ namespace Kit.Unity
 
                 if (name == "duration")
                 {
-                    duration = (float)property.GetValue(props);
+                    duration = Convert.ToSingle(property.GetValue(props));
                     continue;
                 }
 
                 if (name == "delay")
                 {
-                    delay = (float)property.GetValue(props);
+                    delay = Convert.ToSingle(property.GetValue(props));
                     continue;
                 }
 
