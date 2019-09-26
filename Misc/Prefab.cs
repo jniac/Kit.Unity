@@ -29,5 +29,12 @@ namespace Kit.Unity
 
             return instance;
         }
+
+        public static GameObject InstantiatePrefab(string resourcesPath, Transform parent = null, string name = null)
+        {
+            var r = Resources.Load<GameObject>(resourcesPath);
+
+            return InstantiatePrefab(r, parent, name);
+        }
     }
 }
