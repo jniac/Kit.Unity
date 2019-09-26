@@ -9,7 +9,7 @@ namespace Kit.Unity
     public static class TransformExtensions
     {
         public static bool IsParentOf(this Transform parent, Transform child)
-            => child.IsChildOf(parent);
+            => child != null && child.IsChildOf(parent);
 
         public static bool IsAncestorOf(this Transform parent, Transform child)
         {
