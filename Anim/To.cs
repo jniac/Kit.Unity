@@ -10,17 +10,27 @@ namespace Kit.Unity
     public partial class Anim
     {
         // Fetch the right method (name and params should match).
-        static MethodInfo Matching(MethodInfo[] methods, string name, Type paramType1, Type paramType2) =>
-            methods
-            .Where(m => m.Name == name)
-            .Single(m =>
+        static MethodInfo Matching(PropertyInfo property, string name, Type paramType1, Type paramType2)
+        {
+            try
             {
-                var ps = m.GetParameters();
+                return property.PropertyType.GetMethods()
+                    .Where(m => m.Name == name)
+                    .Single(m =>
+                    {
+                        var ps = m.GetParameters();
 
-                return ps.Length == 2
-                    && ps[0].ParameterType == paramType1
-                    && ps[1].ParameterType == paramType2;
-            });
+                        return ps.Length == 2
+                            && ps[0].ParameterType == paramType1
+                            && ps[1].ParameterType == paramType2;
+                    });
+            }
+            catch
+            {
+                throw new Exception($"Oups, on ({property.PropertyType.Name})\"{property.Name}\" " +
+                	$"no method: {name}({paramType1.Name}, {paramType2.Name})");
+            }
+        }
 
         static bool EvaluateDistance(object delta, out float distance)
         {
@@ -64,6 +74,12 @@ namespace Kit.Unity
                     continue;
                 }
 
+                if (name == "delay")
+                {
+                    delay = (float)property.GetValue(props);
+                    continue;
+                }
+
                 if (name == "ease")
                 {
                     ease = property.GetValue(props) as Func<float, float>;
@@ -90,6 +106,11 @@ namespace Kit.Unity
                 object from = propertyTarget.GetValue(target);
                 object to = property.GetValue(props);
 
+                if (from.GetType() != to.GetType())
+                {
+                    throw new Exception($"oups, ({from.GetType()})\"from\" & ({to.GetType()})\"to\" do not match the same type!");
+                }
+
                 Action<float> action;
 
                 if (from is Quaternion fromQ && to is Quaternion toQ)
@@ -97,12 +118,16 @@ namespace Kit.Unity
                     action = t => propertyTarget.SetValue(target, 
                         Quaternion.SlerpUnclamped(fromQ, toQ, t));
                 }
+                else if (from is float fromF && to is float toF)
+                {
+                    action = t => propertyTarget.SetValue(target,
+                        fromF + (toF - fromF) * t);
+                }
                 else
                 {
-                    var methods = property.PropertyType.GetMethods();
-                    var add = Matching(methods, "op_Addition", type, type);
-                    var sub = Matching(methods, "op_Subtraction", type, type);
-                    var mul = Matching(methods, "op_Multiply", type, typeof(float));
+                    var add = Matching(property, "op_Addition", type, type);
+                    var sub = Matching(property, "op_Subtraction", type, type);
+                    var mul = Matching(property, "op_Multiply", type, typeof(float));
 
                     object delta = sub.Invoke(null, new object[] { to, from });
 
@@ -110,7 +135,7 @@ namespace Kit.Unity
                         distance = distanceEvaluation;
 
                     action = t => propertyTarget.SetValue(target,
-                        add.Invoke(null, new object[] { from, mul.Invoke(null, new object[] { delta, t }) }));
+                    add.Invoke(null, new object[] { from, mul.Invoke(null, new object[] { delta, t }) }));
                 }
 
                 actions.Add(action);
