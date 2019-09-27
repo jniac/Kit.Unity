@@ -61,6 +61,28 @@ namespace Kit.Unity
             if (EditorGUI.EndChangeCheck())
                 then();
         }
+
+        static RectOffset boxPadding; 
+        static RectOffset BoxPadding => boxPadding ?? (boxPadding = new RectOffset(10, 10, 10, 10));
+        public static void InsideBox(Action action)
+        {
+            GUIStyle style = new GUIStyle(EditorStyles.helpBox) { padding = BoxPadding };
+            EditorGUILayout.BeginVertical(style);
+
+            action();
+
+            EditorGUILayout.EndVertical();
+        }
+
+        public static bool WideToggle(string label, bool value, params GUILayoutOption[] options)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(label, EditorStyles.boldLabel, options);
+            value = EditorGUILayout.Toggle(value, GUILayout.Width(16));
+            EditorGUILayout.EndHorizontal();
+
+            return value;
+        }
 #endif
     }
 }
