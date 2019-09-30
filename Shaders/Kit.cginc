@@ -78,6 +78,43 @@ float easeInOut(float x, float p, float i)
 
 
 
+float mod(float x) 
+{
+	x %= 1;
+	return x < 0 ? x + 1 : x;
+}
+float mod(float x, in float m) 
+{
+	x %= m;
+	return x < 0 ? x + m : x;
+}
+float2 mod(float2 v, in float m) 
+{
+	return float2(mod(v.x, m), mod(v.y, m));
+}
+float2 mod(float2 v) 
+{
+	return float2(mod(v.x), mod(v.y));
+}
+
+
+float2 rotate(float2 v, float angle) 
+{
+	float c = cos(angle);
+	float s = sin(angle);
+
+	return float2(
+		v.x * c - v.y * s,
+		v.x * s + v.y * c);
+}
+
+
+
+
+
+
+
+
 
 const static float3 red = float3(1, 0, 0);
 const static float3 blue = float3(0, 0, 1);
