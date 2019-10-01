@@ -2,6 +2,8 @@ Shader "Kit/Color"
 {
     Properties
     {
+        // https://forum.unity.com/threads/expose-shader-culling-option-in-material-editor.200236/
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 0
         _Color ("Color", Color) = (1,1,1,1)
     }
     SubShader
@@ -11,6 +13,7 @@ Shader "Kit/Color"
 
         ZWrite Off
         Blend SrcAlpha OneMinusSrcAlpha
+        Cull [_Cull]
 
         Pass
         {
