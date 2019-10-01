@@ -120,6 +120,28 @@ namespace Kit.Unity
 
 
 
+        // Get() replace Collect()
+        // Get() is based on IEnumerable, so it's better, since IEnumerable<T> are lazy.
+        public static IEnumerable<T> Get<T>(this Transform transform, 
+            Func<Transform, bool> test = null, bool includeSelf = false, int recursiveLimit = -1)
+            where T : Component
+        {
+            if (includeSelf)
+            {
+                if (test == null || test(transform))
+                    foreach (T c in transform.GetComponents<T>())
+                        yield return c;
+            }
+
+            if (recursiveLimit != 0)
+            {
+                foreach (Transform child in transform)
+                    foreach (T c in Get<T>(child, test, true, recursiveLimit - 1))
+                        yield return c;
+            }
+        }
+
+
         public static void DestroyAllChildren(this Transform transform)
         {
             foreach(var t in transform.Cast<Transform>().ToArray())
