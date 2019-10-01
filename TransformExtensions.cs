@@ -141,5 +141,12 @@ namespace Kit.Unity
             v.y = y;
             return transform.localScale = v;
         }
+        public static Vector3 ChangeLocalScaleXY(this Transform transform, float x, float y)
+        {
+            var v = transform.localScale;
+            v.x = x;
+            v.y = y;
+            return transform.localScale = v;
+        }
     }
 }
