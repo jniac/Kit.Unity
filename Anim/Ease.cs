@@ -22,9 +22,18 @@
             public static Del Out5 = x => 1f - (x = 1f - x) * x * x * x * x;
 
             // https://www.desmos.com/calculator/kikl4d4sed
+            public static float InOut(float x, float power, float inflexion) => x < inflexion
+                ? Pow(inflexion, 1f - power) * Pow(x, power)
+                : 1f - Pow(inflexion - x, 1f - power) * Pow(1f - x, power);
             public static Del InOut(float power, float inflexion = .5f) => x => x < inflexion
                 ? Pow(inflexion, 1f - power) * Pow(x, power)
                 : 1f - Pow(inflexion - x, 1f - power) * Pow(1f - x, power);
+            public static float InOut(float min, float max, float x, float power, float inflexion)
+            {
+                float t = InOut(x, power, inflexion);
+
+                return min + (max - min) * t;
+            }
             public static Del InOut2 = x => x < .5f ? (x = x * 2f) * x / 2f : 1f - (x = 2f * (1f - x)) * x / 2f;
             public static Del InOut3 = x => x < .5f ? (x = x * 2f) * x * x / 2f : 1f - (x = 2f * (1f - x)) * x * x / 2f;
             public static Del InOut4 = x => x < .5f ? (x = x * 2f) * x * x * x / 2f : 1f - (x = 2f * (1f - x)) * x * x * x / 2f;
