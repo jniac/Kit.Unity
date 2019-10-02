@@ -127,19 +127,23 @@ namespace Kit.Unity
             where T : Component
         {
             if (includeSelf)
-            {
                 if (test == null || test(transform))
                     foreach (T c in transform.GetComponents<T>())
                         yield return c;
-            }
 
             if (recursiveLimit != 0)
-            {
                 foreach (Transform child in transform)
                     foreach (T c in Get<T>(child, test, true, recursiveLimit - 1))
                         yield return c;
-            }
         }
+
+        public static IEnumerable<T> Get<T>(this Transform transform,
+            string gameObjectName, bool includeSelf = false, int recursiveLimit = -1)
+            where T : Component =>
+            Get<T>(transform, t => t.gameObject.name == gameObjectName, includeSelf, recursiveLimit);
+            
+
+
 
 
         public static void DestroyAllChildren(this Transform transform)
@@ -155,6 +159,13 @@ namespace Kit.Unity
                     UnityEngine.Object.DestroyImmediate(t.gameObject);
                 }
             }
+        }
+
+        public static Vector3 ChangeLocalPositionZ(this Transform transform, float z)
+        {
+            var v = transform.localPosition;
+            v.z = z;
+            return transform.localPosition = v;
         }
 
         public static Vector3 ChangeLocalScaleY(this Transform transform, float y)
