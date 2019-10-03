@@ -1,9 +1,20 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Kit.Unity
 {
     public static class Geom
     {
+        public static Vector3 Min(params Vector3[] args)
+        {
+            return args.Aggregate(Vector3.Min);
+        }
+
+        public static Vector3 Max(params Vector3[] args)
+        {
+            return args.Aggregate(Vector3.Max);
+        }
+
         public static float RayDistance(Ray ray, Vector3 point)
             => Vector3.Cross(ray.direction, point - ray.origin).magnitude;
 
