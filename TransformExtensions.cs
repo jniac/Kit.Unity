@@ -132,9 +132,16 @@ namespace Kit.Unity
                         yield return c;
 
             if (recursiveLimit != 0)
+            {
                 foreach (Transform child in transform)
-                    foreach (T c in Get<T>(child, test, true, recursiveLimit - 1))
+                    if (test == null || test(child))
+                        foreach (T c in child.GetComponents<T>())
+                            yield return c;
+
+                foreach (Transform child in transform)
+                    foreach (T c in Get<T>(child, test, false, recursiveLimit - 1))
                         yield return c;
+            }
         }
 
         public static IEnumerable<T> Get<T>(this Transform transform,
