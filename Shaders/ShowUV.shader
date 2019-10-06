@@ -2,6 +2,7 @@
 {
     Properties
     {
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 0
         SPACING ("SPACING", Range(1, 32)) = 8
         DOT_SIZE ("DOT_SIZE", Range(0, 1)) = 0.1
     }
@@ -9,6 +10,7 @@
     {
         Tags { "RenderType"="Opaque" "PreviewType"="Plane" }
         LOD 100
+        Cull [_Cull]
 
         Pass
         {
