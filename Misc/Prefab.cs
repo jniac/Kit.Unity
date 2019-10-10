@@ -15,14 +15,15 @@ namespace Kit.Unity
             if (source == null)
                 throw new Exception("oups, source is null!!!");
 
-            #if UNITY_EDITOR
-            var instance = (GameObject)PrefabUtility.InstantiatePrefab(source);
-            #else
-            var instance =  (GameObject)UnityEngine.Object.Instantiate(source);
-            #endif
-
-            if (parent)
-                instance.transform.SetParent(parent, false);
+#if UNITY_EDITOR
+            var instance = parent ?
+                (GameObject)PrefabUtility.InstantiatePrefab(source, parent) :
+                (GameObject)PrefabUtility.InstantiatePrefab(source);
+#else
+            var instance = parent ? 
+                (GameObject)UnityEngine.Object.Instantiate(source, parent):
+                (GameObject)UnityEngine.Object.Instantiate(source);
+#endif
 
             if (name != null)
                 instance.name = name;
