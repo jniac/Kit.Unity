@@ -14,7 +14,7 @@ namespace Kit.Unity
 
     static class Extensions
     {
-        public static T Print<T>(this T t, string pattern = null, bool type = false)
+        public static T Print<T>(this T t, string pattern = null, bool type = false, LogType logType = LogType.Log)
         {
             var str = t?.ToString() ?? "null";
 
@@ -26,10 +26,22 @@ namespace Kit.Unity
             if (type)
                 str = $"({t.GetType().Name}) {str}";
 
-            Debug.Log(str);
+            switch (logType)
+            {
+                case LogType.Log:
+                    Debug.Log(str);
+                    break;
+
+                case LogType.Error:
+                    Debug.LogError(str);
+                    break;
+            }
 
             return t;
         }
+
+        public static T PrintError<T>(this T t, string pattern = null, bool type = false) =>
+            Print(t, pattern, type, LogType.Error);
 
         public static T PrintList<T>(this T t, string pattern = null, int max = 10)
             where T : IEnumerable
