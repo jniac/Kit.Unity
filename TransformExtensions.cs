@@ -145,9 +145,18 @@ namespace Kit.Unity
         }
 
         public static IEnumerable<T> Get<T>(this Transform transform,
-            string gameObjectName, bool includeSelf = false, int recursiveLimit = -1)
-            where T : Component =>
-            Get<T>(transform, t => t.gameObject.name == gameObjectName, includeSelf, recursiveLimit);
+            string str, bool includeSelf = false, int recursiveLimit = -1)
+            where T : Component
+        {
+            if (str.Contains(','))
+            {
+                var parts = new Regex(@"\s*,\s*").Split(str);
+
+                return Get<T>(transform, t => parts.Contains(t.gameObject.name), includeSelf, recursiveLimit);
+            }
+
+            return Get<T>(transform, t => t.gameObject.name == str, includeSelf, recursiveLimit);
+        }
 
         public static T First<T>(this Transform transform,
             string gameObjectName, bool includeSelf = false, int recursiveLimit = -1)
