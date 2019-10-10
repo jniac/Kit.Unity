@@ -11,6 +11,32 @@ namespace Kit.Unity
     public static partial class Misc
     {
 #if UNITY_EDITOR
+
+        static bool CoolFontPlzDone = false;
+        public static void CoolFontPlz()
+        {
+            if (CoolFontPlzDone)
+                return;
+
+            try
+            {
+                Font font = Resources.Load<Font>("Fonts/Roboto_Mono/RobotoMono-Regular");
+                EditorStyles.popup.font = font;
+                EditorStyles.label.font = font;
+                EditorStyles.helpBox.font = font;
+
+                CoolFontPlzDone = true;
+            }
+            catch (Exception e)
+            {
+                // Unity hasn't initialized his own object,
+                // fail silently, next time will be the right time
+
+                //Debug.LogWarning("oups, CoolFontPlzDone");
+                //Debug.LogException(e);
+            }
+        }
+
         public static void HelpBox(MessageType type, params object[] args) =>
             EditorGUILayout.HelpBox(args.StringJoin("\n").Trim(), type);
 
