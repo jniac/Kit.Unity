@@ -155,19 +155,31 @@ namespace Kit.Unity
             Get<T>(transform, gameObjectName, includeSelf, recursiveLimit).First();
 
 
+        public static IEnumerable<Transform> GetParents(this Transform transform, bool includeSelf = false)
+        {
+            var scope = includeSelf ? transform : transform.parent;
+
+            while (scope)
+            {
+                yield return scope;
+
+                scope = scope.parent;
+            }
+        }
+
+
 
         public static void DestroyAllChildren(this Transform transform)
         {
-            foreach(var t in transform.Cast<Transform>().ToArray())
+            if (Application.isPlaying)
             {
-                if (Application.isPlaying)
-                {
+                foreach (var t in transform.Cast<Transform>().ToArray())
                     UnityEngine.Object.Destroy(t.gameObject);
-                }
-                else
-                {
+            }
+            else
+            {
+                foreach (var t in transform.Cast<Transform>().ToArray())
                     UnityEngine.Object.DestroyImmediate(t.gameObject);
-                }
             }
         }
 
