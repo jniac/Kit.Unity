@@ -148,8 +148,11 @@ namespace Kit.Unity
             string gameObjectName, bool includeSelf = false, int recursiveLimit = -1)
             where T : Component =>
             Get<T>(transform, t => t.gameObject.name == gameObjectName, includeSelf, recursiveLimit);
-            
 
+        public static T First<T>(this Transform transform,
+            string gameObjectName, bool includeSelf = false, int recursiveLimit = -1)
+            where T : Component =>
+            Get<T>(transform, gameObjectName, includeSelf, recursiveLimit).First();
 
 
 
