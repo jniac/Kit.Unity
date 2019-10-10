@@ -50,6 +50,22 @@ fixed4 mix(fixed4 a, fixed4 b, float t = .5)
 {
 	return t < 0 ? a : t > 1 ? b : mixUnclamped(a, b, t);
 }
+float ratio(float x, float min, float max)
+{
+	return clamp((x - min) / (max - min));
+}
+float ratioUnclamped(float x, float min, float max)
+{
+	return (x - min) / (max - min);
+}
+float ratioAround(float x, float threshold, float deviation)
+{
+	return ratio(x, threshold - deviation, threshold + deviation);
+}
+float hermite(float x) 
+{
+	return x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
+}
 
 
 
@@ -138,6 +154,13 @@ float circle(in float2 p, float radius)
 float sdCircle(in float2 p, in float r)
 {
 	return length(p) - r;
+}
+
+float sdLine( in float2 p, in float2 a, in float2 b )
+{
+    float2 pa = p-a, ba = b-a;
+    float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
+    return length( pa - ba*h );
 }
 
 float sdBox(in float2 p, in float2 b)
