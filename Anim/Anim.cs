@@ -42,7 +42,10 @@ namespace Kit.Unity
 
         public bool Destroyed { get; private set; }
 
-        public Action<Anim> callback;
+        public readonly Action<Anim> callback;
+
+        List<Action<Anim>> callbacks;
+        public List<Action<Anim>> Callbacks => callbacks ?? (callbacks = new List<Action<Anim>>());
 
         bool autoKillNullifiedKey;
 
@@ -108,6 +111,10 @@ namespace Kit.Unity
                 time = duration;
 
             callback(this);
+
+            if (callbacks != null)
+                foreach (var c in callbacks)
+                    c(this);
 
             if (time == duration)
             {
