@@ -178,6 +178,7 @@ namespace Kit.Unity
 
 
 
+
         public static void DestroyAllChildren(this Transform transform)
         {
             if (Application.isPlaying)
@@ -191,6 +192,12 @@ namespace Kit.Unity
                     UnityEngine.Object.DestroyImmediate(t.gameObject);
             }
         }
+
+
+
+
+
+
 
         public static Vector3 ChangeLocalPositionZ(this Transform transform, float z)
         {

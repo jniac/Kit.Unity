@@ -2,9 +2,9 @@
 
 namespace Kit.Unity
 {
-    public static class MyUnityEngineExtensions_GameObject
+    public static class RequireComponentExtensions
     {
-        public static T RequireComponent<T>(this GameObject gameObject) 
+        public static T RequireComponent<T>(this GameObject gameObject)
             where T : Component
         {
             T component = gameObject.GetComponent<T>();
@@ -15,7 +15,7 @@ namespace Kit.Unity
             return component;
         }
 
-        public static bool RemoveComponent<T>(this GameObject gameObject) 
+        public static bool RemoveComponent<T>(this GameObject gameObject)
             where T : Component
         {
             T component = gameObject.GetComponent<T>();
@@ -33,7 +33,7 @@ namespace Kit.Unity
             return false;
         }
 
-        public static void ToggleComponent<T>(this GameObject gameObject, bool componentIsRequired) 
+        public static void ToggleComponent<T>(this GameObject gameObject, bool componentIsRequired)
             where T : Component
         {
             if (componentIsRequired)
@@ -46,8 +46,16 @@ namespace Kit.Unity
             }
         }
 
-        public static void ToggleComponent<T>(this GameObject gameObject) 
+        public static void ToggleComponent<T>(this GameObject gameObject)
             where T : Component
             => gameObject.ToggleComponent<T>((bool)gameObject.GetComponent<T>());
+
+
+
+
+
+        public static T RequireComponent<T>(this Transform transform)
+            where T : Component =>
+            transform.gameObject.RequireComponent<T>();
     }
 }

@@ -27,7 +27,11 @@ namespace Kit.Unity
 
                 CoolFontPlzDone = true;
             }
+#pragma warning disable CS0168 // La variable est déclarée mais jamais utilisée
+#pragma warning disable RECS0022 // Clause catch qui intercepte System.Exception et dont le corps est vide
             catch (Exception e)
+#pragma warning restore RECS0022 // Clause catch qui intercepte System.Exception et dont le corps est vide
+#pragma warning restore CS0168 // La variable est déclarée mais jamais utilisée
             {
                 // Unity hasn't initialized his own object,
                 // fail silently, next time will be the right time
