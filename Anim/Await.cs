@@ -25,7 +25,7 @@ namespace Kit.Unity
             public bool IsCompleted { get => anim.Complete; }
 
             public void OnCompleted(Action continuation) =>
-                anim.onComplete.Add(continuation);
+                anim._onComplete.Add(continuation);
         }
     }
 }

@@ -38,18 +38,18 @@ namespace Kit.Unity
         public bool ProgressUpThrough(float threshold) =>
             TimeUpTrough(threshold * duration);
 
-        List<Action> onComplete = new List<Action>();
+        List<Action> _onComplete = new List<Action>();
 
         public bool Destroyed { get; private set; }
 
         public readonly Action<Anim> callback;
 
-        List<Action<Anim>> callbacks;
-        public List<Action<Anim>> Callbacks => callbacks ?? (callbacks = new List<Action<Anim>>());
-
         bool autoKillNullifiedKey;
 
-        public AwaitableCompletion Completion { get => new AwaitableCompletion(this); }
+        List<Action<Anim>> onUpdate;
+        public List<Action<Anim>> OnUpdate => onUpdate ?? (onUpdate = new List<Action<Anim>>());
+
+        public AwaitableCompletion Completion => new AwaitableCompletion(this);
 
         public Anim(object key, Action<Anim> callback, 
             float duration = 1, float delay = 0, 
@@ -112,13 +112,13 @@ namespace Kit.Unity
 
             callback(this);
 
-            if (callbacks != null)
-                foreach (var c in callbacks)
-                    c(this);
+            if (onUpdate != null)
+                foreach (var action in onUpdate)
+                    action(this);
 
             if (time == duration)
             {
-                foreach (var action in onComplete)
+                foreach (var action in _onComplete)
                     action();
 
                 Destroy();
