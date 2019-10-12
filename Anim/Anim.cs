@@ -49,6 +49,9 @@ namespace Kit.Unity
         List<Action<Anim>> onUpdate;
         public List<Action<Anim>> OnUpdate => onUpdate ?? (onUpdate = new List<Action<Anim>>());
 
+        List<Action<Anim>> onComplete;
+        public List<Action<Anim>> OnComplete => onComplete ?? (onComplete = new List<Action<Anim>>());
+
         public AwaitableCompletion Completion => new AwaitableCompletion(this);
 
         public Anim(object key, Action<Anim> callback, 
@@ -120,6 +123,10 @@ namespace Kit.Unity
             {
                 foreach (var action in _onComplete)
                     action();
+
+                if (onComplete != null)
+                    foreach (var action in onComplete)
+                        action(this);
 
                 Destroy();
             }
