@@ -50,15 +50,16 @@ namespace Kit.Unity
             return false;
         }
 
-        public static Anim To(object target, float duration, object props, 
+        public static Anim To(object target, float duration, object props,
             bool autoKillSimilarTarget = true, bool autoKillNullifiedTarget = true, bool preRun = true)
         {
             Type targetType = target.GetType();
 
             List<Action<float>> actions = new List<Action<float>>();
 
+            var key = target;
             var ease = Ease.Out3;
-            float delay = 0;
+            var delay = 0f;
 
             // speed
             float speed = float.NaN, distance = float.NaN;
@@ -92,6 +93,13 @@ namespace Kit.Unity
                     continue;
                 }
 
+                // by the default, 'key' is 'target', but that value can be overrided
+                if (name == "key")
+                {
+                    key = property.GetValue(props);
+                    continue;
+                }
+
                 var propertyTarget = targetType.GetProperty(name);
 
                 if (propertyTarget == null)
@@ -115,7 +123,7 @@ namespace Kit.Unity
 
                 if (from is Quaternion fromQ && to is Quaternion toQ)
                 {
-                    action = t => propertyTarget.SetValue(target, 
+                    action = t => propertyTarget.SetValue(target,
                         Quaternion.SlerpUnclamped(fromQ, toQ, t));
                 }
                 else if (from is float fromF && to is float toF)
@@ -147,7 +155,7 @@ namespace Kit.Unity
             if (autoKillSimilarTarget)
                 Kill(target);
 
-            return new Anim(target, anim => 
+            return new Anim(key, anim =>
             {
                 float t = ease(anim.Progress);
 
