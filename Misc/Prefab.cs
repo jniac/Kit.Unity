@@ -10,6 +10,21 @@ namespace Kit.Unity
 {
     public static partial class Misc
     {
+        public static GameObject Instantiate(GameObject source, Transform parent = null, string name = null)
+        {
+            if (source == null)
+                throw new Exception("oups, source is null!!!");
+
+            var instance = parent ? 
+                UnityEngine.Object.Instantiate(source, parent):
+                UnityEngine.Object.Instantiate(source);
+
+            if (name != null)
+                instance.name = name;
+
+            return instance;
+        }
+
         public static GameObject InstantiatePrefab(GameObject source, Transform parent = null, string name = null)
         {
             if (source == null)
