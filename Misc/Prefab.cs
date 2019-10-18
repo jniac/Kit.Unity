@@ -25,19 +25,20 @@ namespace Kit.Unity
             return instance;
         }
 
-        public static GameObject InstantiatePrefab(GameObject source, Transform parent = null, string name = null)
+        public static T InstantiatePrefab<T>(T source, Transform parent = null, string name = null)
+            where T : UnityEngine.Object
         {
             if (source == null)
                 throw new Exception("oups, source is null!!!");
 
 #if UNITY_EDITOR
             var instance = parent ?
-                (GameObject)PrefabUtility.InstantiatePrefab(source, parent) :
-                (GameObject)PrefabUtility.InstantiatePrefab(source);
+                (T)PrefabUtility.InstantiatePrefab(source, parent) :
+                (T)PrefabUtility.InstantiatePrefab(source);
 #else
             var instance = parent ? 
-                (GameObject)UnityEngine.Object.Instantiate(source, parent):
-                (GameObject)UnityEngine.Object.Instantiate(source);
+                (T)UnityEngine.Object.Instantiate(source, parent):
+                (T)UnityEngine.Object.Instantiate(source);
 #endif
 
             if (name != null)
