@@ -114,12 +114,23 @@ namespace Kit.Unity
 
                 bool propertyTypesMatch = propertyTarget.PropertyType == type;
 
-                if (!propertyTypesMatch)
-                    throw new Exception($"properties \"{name}\" do not match: " +
-                    	$"\nfrom: {type}, to: {propertyTarget.PropertyType}");
-
                 object from = propertyTarget.GetValue(target);
                 object to = property.GetValue(props);
+
+                if (!propertyTypesMatch)
+                {
+                    // auto cast int to float
+                    if (from is float fromF && to is int toI)
+                    {
+                        float toF = (float)toI;
+                        float d = toF - fromF;
+                        actions.Add(t => propertyTarget.SetValue(target, fromF + d * t));
+                        continue;
+                    }
+
+                    throw new Exception($"properties \"{name}\" do not match: " +
+                            $"\nfrom: {type}, to: {propertyTarget.PropertyType}");
+                }
 
                 if (from.GetType() != to.GetType())
                 {
