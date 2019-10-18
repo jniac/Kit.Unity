@@ -56,6 +56,7 @@ namespace Kit.Unity
             Type targetType = target.GetType();
 
             List<Action<float>> actions = new List<Action<float>>();
+            Action onComplete = null;
 
             var key = target;
             var ease = Ease.Out3;
@@ -97,6 +98,12 @@ namespace Kit.Unity
                 if (name == "key")
                 {
                     key = property.GetValue(props);
+                    continue;
+                }
+
+                if (name == "onComplete")
+                {
+                    onComplete = (Action)property.GetValue(props);
                     continue;
                 }
 
@@ -161,6 +168,9 @@ namespace Kit.Unity
 
                 foreach (var action in actions)
                     action(t);
+
+                if (anim.Complete && onComplete != null)
+                    onComplete();
 
             }, duration, delay, autoKillNullifiedTarget, preRun);
         }
