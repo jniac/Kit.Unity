@@ -10,7 +10,8 @@ namespace Kit.Unity
 {
     public static partial class Misc
     {
-        public static GameObject Instantiate(GameObject source, Transform parent = null, string name = null)
+        public static T Instantiate<T>(T source, Transform parent = null, string name = null)
+            where T : UnityEngine.Object
         {
             if (source == null)
                 throw new Exception("oups, source is null!!!");
