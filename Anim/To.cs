@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -53,6 +54,16 @@ namespace Kit.Unity
         public static Anim To(object target, float duration, object props,
             bool autoKillSimilarTarget = true, bool autoKillNullifiedTarget = true, bool preRun = true)
         {
+            if (target is IList list)
+            {
+                Anim anim = null;
+
+                foreach (var subtarget in list)
+                    anim = To(subtarget, duration, props, autoKillSimilarTarget, autoKillNullifiedTarget, preRun);
+
+                return anim;
+            }
+
             Type targetType = target.GetType();
 
             List<Action<float>> actions = new List<Action<float>>();
