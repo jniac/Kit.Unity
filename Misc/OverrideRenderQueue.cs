@@ -12,19 +12,36 @@ namespace Kit.Unity
     [ExecuteAlways]
     public class OverrideRenderQueue : MonoBehaviour
     {
+        public Material original;
+        public Material clone;
+
         public bool overrideRenderQueue;
         public int renderQueue;
 
-        private void OnValidate()
+        MeshRenderer mr;
+
+        void Awake()
         {
+            mr = GetComponent<MeshRenderer>();
+            original = mr.sharedMaterial;
+            clone = new Material(original) { name = $"{original.name}(clone)" };
+            mr.sharedMaterial = clone;
+
             if (overrideRenderQueue)
-            {
-                foreach(var m in GetComponent<MeshRenderer>().sharedMaterials)
-                {
-                    m.renderQueue = renderQueue;
-                }
-            }
+                clone.renderQueue = renderQueue;
         }
+
+        private void OnEnable()
+        {
+            mr.sharedMaterial = clone;
+        }
+
+        void OnValidate()
+        {
+            if (clone && overrideRenderQueue)
+                clone.renderQueue = renderQueue;
+        }
+
 #if UNITY_EDITOR
         [CustomEditor(typeof(OverrideRenderQueue))]
         class MyEditor : Editor
