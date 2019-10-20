@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Kit.Unity
@@ -70,6 +72,38 @@ namespace Kit.Unity
             mesh.RecalculateNormals();
 
             Gizmos.DrawMesh(mesh);
+        }
+
+
+
+
+
+
+
+        public static void GizmosDrawPath(IEnumerable<Vector3> points, bool closed = true)
+        {
+            var previous = points.LastOrDefault();
+
+            foreach(var p in points)
+            {
+                Gizmos.DrawLine(previous, p);
+                previous = p;
+            }
+        }
+
+        public static void GizmosDrawCircleXY(Vector3 center, float radius, int step = 36, float z = 0)
+        {
+            var points = new Vector3[step];
+
+            for (var i = 0; i < step; i++)
+            {
+                var a = Mathf.PI * 2 * i / step;
+                var x = radius * Mathf.Cos(a);
+                var y = radius * Mathf.Sin(a);
+                points[i] = center + new Vector3(x, y, z);
+            }
+
+            GizmosDrawPath(points);
         }
     }
 }
