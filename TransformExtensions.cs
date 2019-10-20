@@ -159,10 +159,14 @@ namespace Kit.Unity
         }
 
         public static T First<T>(this Transform transform,
+            Func<Transform, bool> test = null, bool includeSelf = false, int recursiveLimit = -1)
+            where T : Component =>
+            Get<T>(transform, test, includeSelf, recursiveLimit).First();
+
+        public static T First<T>(this Transform transform,
             string gameObjectName, bool includeSelf = false, int recursiveLimit = -1)
             where T : Component =>
             Get<T>(transform, gameObjectName, includeSelf, recursiveLimit).First();
-
 
         public static IEnumerable<Transform> GetParents(this Transform transform, bool includeSelf = false)
         {
