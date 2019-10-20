@@ -168,6 +168,10 @@ namespace Kit.Unity
             where T : Component =>
             Get<T>(transform, gameObjectName, includeSelf, recursiveLimit).First();
 
+        public static Transform First(this Transform transform,
+            string gameObjectName, bool includeSelf = false, int recursiveLimit = -1) =>
+            Get<Transform>(transform, gameObjectName, includeSelf, recursiveLimit).First();
+
         public static IEnumerable<Transform> GetParents(this Transform transform, bool includeSelf = false)
         {
             var scope = includeSelf ? transform : transform.parent;
