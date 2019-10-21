@@ -48,6 +48,9 @@ namespace Kit.Unity
         public static Color Color(string hex, float alpha) =>
             WithAlpha(Color(hex), alpha);
 
+        public static Color Color(string hex, int alpha) =>
+            WithAlpha(Color(hex), (float)alpha / 255);
+
         public static Color WithAlpha(Color color, float alpha) =>
             new Color(color.r, color.g, color.b, alpha);
     }
