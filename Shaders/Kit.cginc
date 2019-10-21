@@ -50,6 +50,15 @@ fixed4 mix(fixed4 a, fixed4 b, float t = .5)
 {
 	return t < 0 ? a : t > 1 ? b : mixUnclamped(a, b, t);
 }
+fixed3 mixUnclamped(fixed3 a, fixed3 b, float t = .5) 
+{
+	return a + (b - a) * t;
+}
+fixed3 mix(fixed3 a, fixed3 b, float t = .5) 
+{
+	return t < 0 ? a : t > 1 ? b : mixUnclamped(a, b, t);
+}
+
 float ratio(float x, float min, float max)
 {
 	return clamp((x - min) / (max - min));
@@ -122,6 +131,11 @@ float2 rotate(float2 v, float angle)
 	return float2(
 		v.x * c - v.y * s,
 		v.x * s + v.y * c);
+}
+
+fixed4 withAlpha(fixed4 color, fixed alpha)
+{
+	return fixed4(color.rgb, alpha);
 }
 
 
