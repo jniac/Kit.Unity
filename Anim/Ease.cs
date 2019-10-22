@@ -1,4 +1,4 @@
-﻿namespace Kit.Unity
+﻿namespace Kit
 {
     using static UnityEngine.Mathf;
     using Del = System.Func<float, float>;

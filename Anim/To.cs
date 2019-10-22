@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Kit.Utils;
+using Kit;
 using UnityEngine;
 
-namespace Kit.Unity
+namespace Kit
 {
     public partial class Anim
     {

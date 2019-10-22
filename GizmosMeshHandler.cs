@@ -7,7 +7,7 @@ using UnityEditor;
 #endif
 
 
-namespace Kit.Unity
+namespace Kit
 {
     public class GizmosMeshHandler : MonoBehaviour
     {

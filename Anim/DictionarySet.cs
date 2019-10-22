@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kit.Unity
+namespace Kit
 {
     public partial class Anim
     {

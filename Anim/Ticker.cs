@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Kit.Unity
+namespace Kit
 {
     public partial class Anim
     {

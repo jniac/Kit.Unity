@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace Kit.Unity
+namespace Kit
 {
     public static class TransformGet
     {

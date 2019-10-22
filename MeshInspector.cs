@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Kit.Unity
+namespace Kit
 {
     [ExecuteInEditMode, RequireComponent(typeof(MeshFilter))]
     public class MeshInspector : MonoBehaviour

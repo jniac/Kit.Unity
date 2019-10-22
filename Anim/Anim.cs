@@ -7,7 +7,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
-namespace Kit.Unity
+namespace Kit
 {
     public partial class Anim
     {

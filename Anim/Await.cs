@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace Kit.Unity
+namespace Kit
 {
     public partial class Anim
     {

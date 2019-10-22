@@ -1,6 +1,6 @@
 ﻿#pragma warning disable RECS0018 // Comparaison des nombres à virgule flottante avec l’opérateur d’égalité
 
-namespace Kit.Unity
+namespace Kit
 {
     using System;
 

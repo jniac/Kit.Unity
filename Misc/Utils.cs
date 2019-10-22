@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kit.Unity
+namespace Kit
 {
     public static partial class Misc
     {

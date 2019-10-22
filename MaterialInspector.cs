@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEngine;
 using System.Linq;
-using Kit.Utils;
+using Kit;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace Kit.Unity
+namespace Kit
 {
     public class MaterialInspector : MonoBehaviour
     {

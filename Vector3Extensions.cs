@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Kit.Unity
+namespace Kit
 {
     public static class Vector3Extensions
     {
