@@ -5,8 +5,14 @@ namespace Kit.Unity
 {
     public partial class Anim
     {
-        // thanks to:
-        // https://www.markopapic.com/csharp-under-the-hood-async-await/
+        /*
+         * thanks to:
+         * https://www.markopapic.com/csharp-under-the-hood-async-await/
+         *         
+         * Usage: 
+         * await Anim.During(duration, anim => { ... }).Completion            
+         * 
+         */
 
         public class AwaitableCompletion
         {
