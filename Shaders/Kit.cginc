@@ -135,7 +135,7 @@ float2 rotate(float2 v, float angle)
 
 fixed4 withAlpha(fixed4 color, fixed alpha, bool override = false)
 {
-	return fixed4(color.rgb, clamp(override ? alpha : color.a * alpha));
+	return fixed4(color.rgb, override ? alpha : color.a * alpha);
 }
 
 
