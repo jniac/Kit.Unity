@@ -133,9 +133,9 @@ float2 rotate(float2 v, float angle)
 		v.x * s + v.y * c);
 }
 
-fixed4 withAlpha(fixed4 color, fixed alpha)
+fixed4 withAlpha(fixed4 color, fixed alpha, bool override = false)
 {
-	return fixed4(color.rgb, alpha);
+	return fixed4(color.rgb, clamp(override ? alpha : color.a * alpha));
 }
 
 

@@ -47,6 +47,9 @@ namespace Kit
         public static void HelpBox(params object[] args) =>
             HelpBox(MessageType.None, args);
 
+        public static void Label(object message) =>
+            EditorGUILayout.LabelField(message?.ToString(), EditorStyles.boldLabel);
+
 
         // utility method
         static GUIStyle horizontalLine;
