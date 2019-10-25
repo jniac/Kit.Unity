@@ -59,15 +59,15 @@ namespace Kit
         public static T First<T>(this Transform transform,
             Func<Transform, bool> test = null, bool includeSelf = false, int recursiveLimit = -1)
             where T : Component =>
-            Get<T>(transform, test, includeSelf, recursiveLimit).First();
+            Get<T>(transform, test, includeSelf, recursiveLimit).FirstOrDefault();
 
         public static T First<T>(this Transform transform,
             string gameObjectName, bool includeSelf = false, int recursiveLimit = -1)
             where T : Component =>
-            Get<T>(transform, gameObjectName, includeSelf, recursiveLimit).First();
+            Get<T>(transform, gameObjectName, includeSelf, recursiveLimit).FirstOrDefault();
 
         public static Transform First(this Transform transform,
             string gameObjectName, bool includeSelf = false, int recursiveLimit = -1) =>
-            Get<Transform>(transform, gameObjectName, includeSelf, recursiveLimit).First();
+            Get<Transform>(transform, gameObjectName, includeSelf, recursiveLimit).FirstOrDefault();
     }
 }
