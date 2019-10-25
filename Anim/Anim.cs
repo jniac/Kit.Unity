@@ -54,7 +54,8 @@ namespace Kit
 
         public AwaitableCompletion Completion => new AwaitableCompletion(this);
 
-        public Anim(object key, Action<Anim> callback, 
+        public Anim(object key, 
+            Action<Anim> callback = null, 
             float duration = 1, float delay = 0, 
             bool autoKillNullifiedKey = true,
             bool preRun = true)
@@ -72,7 +73,7 @@ namespace Kit
             this.preRun = preRun;
             if (preRun)
             {
-                callback(this);
+                callback?.Invoke(this);
                 this.preRun = false;
             }
 
@@ -113,7 +114,7 @@ namespace Kit
             if (time > duration)
                 time = duration;
 
-            callback(this);
+            callback?.Invoke(this);
 
             if (onUpdate != null)
                 foreach (var action in onUpdate)
