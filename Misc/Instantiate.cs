@@ -1,6 +1,7 @@
 ﻿using System;
 using Kit;
 using UnityEngine;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -55,6 +56,9 @@ namespace Kit
 
             if (!rsrc)
                 throw new Exception($"oups, no resource for \"{resourcesPath}\"");
+
+            if (name == null)
+                name = resourcesPath.Split('/').Last();
 
             return InstantiatePrefab(rsrc, parent, name);
         }
