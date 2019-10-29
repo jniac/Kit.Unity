@@ -4,7 +4,7 @@ namespace Kit
 {
     public static class RequireComponentExtensions
     {
-        public static T RequireComponent<T>(this GameObject gameObject)
+        public static T Require<T>(this GameObject gameObject)
             where T : Component
         {
             T component = gameObject.GetComponent<T>();
@@ -15,7 +15,7 @@ namespace Kit
             return component;
         }
 
-        public static bool RemoveComponent<T>(this GameObject gameObject)
+        public static bool Remove<T>(this GameObject gameObject)
             where T : Component
         {
             T component = gameObject.GetComponent<T>();
@@ -33,29 +33,29 @@ namespace Kit
             return false;
         }
 
-        public static void ToggleComponent<T>(this GameObject gameObject, bool componentIsRequired)
+        public static void Toggle<T>(this GameObject gameObject, bool componentIsRequired)
             where T : Component
         {
             if (componentIsRequired)
             {
-                gameObject.RequireComponent<T>();
+                gameObject.Require<T>();
             }
             else
             {
-                gameObject.RemoveComponent<T>();
+                gameObject.Remove<T>();
             }
         }
 
-        public static void ToggleComponent<T>(this GameObject gameObject)
+        public static void Toggle<T>(this GameObject gameObject)
             where T : Component
-            => gameObject.ToggleComponent<T>((bool)gameObject.GetComponent<T>());
+            => gameObject.Toggle<T>((bool)gameObject.GetComponent<T>());
 
 
 
 
 
-        public static T RequireComponent<T>(this Transform transform)
+        public static T Require<T>(this Component component)
             where T : Component =>
-            transform.gameObject.RequireComponent<T>();
+            component.gameObject.Require<T>();
     }
 }

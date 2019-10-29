@@ -83,7 +83,7 @@ namespace Kit
                     Target.OnValidate();
 
                 if (GUILayout.Button("Remove"))
-                    Target.gameObject.RemoveComponent<OverrideRenderQueue>();
+                    Target.gameObject.Remove<OverrideRenderQueue>();
             }
         }
 #endif

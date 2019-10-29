@@ -26,6 +26,34 @@ namespace Kit
 
             return instance;
         }
+        public static T Instantiate<T>(string resourcesPath, Transform parent = null, string name = null)
+            where T : UnityEngine.Object
+        {
+            var rsrc = Resources.Load<T>(resourcesPath);
+
+            if (!rsrc)
+                throw new Exception($"oups, no resource for \"{resourcesPath}\"");
+
+            if (name == null)
+                name = resourcesPath.Split('/').Last();
+
+            return Instantiate(rsrc, parent, name);
+        }
+
+        public static GameObject Instantiate(string resourcesPath, Transform parent = null, string name = null)
+        {
+            var rsrc = Resources.Load<GameObject>(resourcesPath);
+
+            if (!rsrc)
+                throw new Exception($"oups, no resource for \"{resourcesPath}\"");
+
+            return Instantiate(rsrc, parent, name);
+        }
+
+
+
+
+
 
         public static T InstantiatePrefab<T>(T source, Transform parent = null, string name = null)
             where T : UnityEngine.Object
